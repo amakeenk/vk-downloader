@@ -12,14 +12,14 @@ import vk
 
 
 class vk_album_downloader():
-    def __init__(self, token, app_id, url):
+    def __init__(self, token, app_id, url, outdir):
         self.token = token
         self.app_id = app_id
         self.url = url
+        self.outdir_name = outdir
         self.vk_api_version = '5.30'
         self.owner_id = url.split('/')[-1].split('_')[0].replace('album', '')
         self.album_id = url.split('/')[-1].split('_')[1]
-        self.outdir_name = 'download'
 
     def init_session(self):
         session = vk.Session(access_token=self.token)
@@ -74,9 +74,10 @@ def main():
     args.add_argument('token', help='vk access token')
     args.add_argument('app_id', help='vk application id')
     args.add_argument('url', help='album url')
+    args.add_argument('outdir', help='directory for downloading')
     args_list = args.parse_args()
-    token, app_id, url = args_list.token, args_list.app_id, args_list.url
-    downloader = vk_album_downloader(token, app_id, url)
+    token, app_id, url, outdir = args_list.token, args_list.app_id, args_list.url, args_list.outdir
+    downloader = vk_album_downloader(token, app_id, url, outdir)
     downloader.init_session()
     downloader.create_dirs()
     downloader.download()
