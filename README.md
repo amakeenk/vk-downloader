@@ -4,5 +4,5 @@
 
 # Usage
 ```
-$ ./vk_album_downloader.py <token> <app_ip> <album_url>
+$ ./vk_album_downloader.py <token> <app_id> <album_url>
 ```
