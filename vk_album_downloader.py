@@ -3,25 +3,36 @@
 # Author: Alexander Makeenkov <amakeenk@altlinux.org>
 
 import argparse
+import configobj
 import math
 import os
 import requests
 import sys
 import time
+import pathlib
 import vk
 
 
 class vk_album_downloader():
-    def __init__(self, token, app_id, url, outdir):
-        self.token = token
-        self.app_id = app_id
+    def __init__(self, url, outdir):
         self.url = url
         self.outdir_name = outdir
         self.vk_api_version = '5.30'
         self.owner_id = url.split('/')[-1].split('_')[0].replace('album', '')
         self.album_id = url.split('/')[-1].split('_')[1]
+        self.config_path = f'{str(pathlib.Path.home())}/.vk-downloader.conf'
+
+    def parse_config(self):
+        if os.path.exists(self.config_path):
+            config = configobj.ConfigObj(self.config_path)
+            self.token = config['token']
+            self.app_id = config['app_id']
+        else:
+            print(f'Config file {self.config_path} not found!')
+            exit(1)
 
     def init_session(self):
+        self.parse_config()
         session = vk.Session(access_token=self.token)
         self.vk_api = vk.API(session, v=self.vk_api_version)
 
@@ -71,13 +82,11 @@ class vk_album_downloader():
 
 def main():
     args = argparse.ArgumentParser()
-    args.add_argument('token', help='vk access token')
-    args.add_argument('app_id', help='vk application id')
     args.add_argument('url', help='album url')
     args.add_argument('outdir', help='directory for downloading')
     args_list = args.parse_args()
-    token, app_id, url, outdir = args_list.token, args_list.app_id, args_list.url, args_list.outdir
-    downloader = vk_album_downloader(token, app_id, url, outdir)
+    url, outdir = args_list.url, args_list.outdir
+    downloader = vk_album_downloader(url, outdir)
     downloader.init_session()
     downloader.create_dirs()
     downloader.download()
