@@ -68,7 +68,7 @@ class vk_album_downloader():
                 best_quality = sorted(quality_list)[-1]
                 counter += 1
                 image_url = image[f'photo_{best_quality}']
-                print(f'Downloading image {counter}/{images_count} with quality: {best_quality} [ progress: {progress}%]')
+                print(f'Downloading image {counter}/{images_count} with quality {best_quality} [ progress: {progress}%]')
                 response = requests.get(image_url)
                 output_file = f'{self.full_output_path}/image_{counter}.jpg'
                 try:
@@ -90,7 +90,7 @@ def main():
     downloader.init_session()
     downloader.create_dirs()
     downloader.download()
-    print(f'All done. Images dowloading to ./{downloader.full_output_path}')
+    print(f'All done. Images dowloading to {downloader.full_output_path}')
 
 
 if __name__ == '__main__':
