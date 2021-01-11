@@ -47,7 +47,7 @@ class vk_album_downloader():
         os.mkdir(self.full_output_path)
 
     def get_album_name(self):
-        return self.vk_api.photos.getAlbums(owner_id=self.owner_id, album_ids=self.album_id)['items'][0]['title']
+        return self.vk_api.photos.getAlbums(owner_id=self.owner_id, album_ids=self.album_id)['items'][0]['title'].replace('/', '')
 
     def get_images_count(self):
         return self.vk_api.photos.getAlbums(owner_id=self.owner_id, album_ids=self.album_id)['items'][0]['size']
